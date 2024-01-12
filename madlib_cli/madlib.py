@@ -23,23 +23,23 @@ def parse_template(template):
     :return: Stripped template string, tuple of language parts.
     """
     stripped_template = "" #initializes empty string; store modified template without curly braces
-    parts = [] #where store info that is inside curly bracket
-    capturing = False #outside curly braces
-    capture = "" 
-    for char in template:
-        if capturing:
-            if char == "}":
-                parts.append(capture)
-                stripped_template += char
-                capture = ""
-                capturing = False
+    parts = [] #initialize empty list; store info that is inside curly bracket
+    capturing = False #sets capture to boolean value of false; indicating parser is currently outside curly braces
+    capture = "" #initializes empty string capture; used to accumulate characters inside curly braces
+    for char in template: #starts loop over each character in input 'template' string
+        if capturing: #checks if parser is currently inside curly braces
+            if char == "}": #checks if current character is the closing curly brace
+                parts.append(capture) #if so, appends accumulated characters inside curly braces to 'parts' list
+                stripped_template += char #also adds closing curly to stripped template
+                capture = "" #resets 'capture' string for next set of characters inside curly braces
+                capturing = False #sets 'capturing' to False; parser now outside curly braces
             else:
-                capture += char
+                capture += char #if current character is not a closing curly brace, adds character to 'capture' string, accumulating characters inside curly braces
         else:
-            stripped_template += char
-            if char == "{":
-                capturing = True #inside curly braces
-    return stripped_template, tuple(parts)
+            stripped_template += char #if parser outside curly braces, adds current character to stripped template
+            if char == "{": #if current character is opening curly brace, sets 'capturing' to True; parser now inside curly braces
+                capturing = True #loops continues all characters in template are processed; in curly braces
+    return stripped_template, tuple(parts) #returns stripped template and tuple of language parts extracted from within curly braces. 'tuple(parts)' ensures parts are returned as immutable tuple
 
 def merge(stripped_template, parts):
     """
